@@ -2,19 +2,18 @@
 <head>
 <title>Toby J. Sullivan</title>
 <script language="javascript" src="js/jquery-1.11.1.min.js"></script>
+<script language="javascript" src="js/filesystem.js"></script>
+<script language="javascript" src="js/lib.js"></script>
 <script language="javascript">
-function execute_command(command) {
-  switch(command.toLowerCase()) {
-    case "help":
-      cmd_help();
-      break;
-    default:
-      print_line("Unknown command: "+command);
-  }
-}
+var path = [ROOT];
 
-function cmd_help() {
-  print_line("There is no help for you.");
+function execute_command(command) {
+  var fn = lib[command];
+  if(typeof fn === 'function') {
+    fn();
+  } else {
+    print_line("Unknown command: "+command);
+  }
 }
 
 function print_line(line) {
@@ -70,6 +69,36 @@ $(window).keydown(function(event) {
 
 <p>Type `help` for available commands</p>
 <p id="console">$ <span id="command_line"></span><span id="cursor">&nbsp;&nbsp;</span></p>
+
+<hr style="margin-top: 300px;">
+
+<!-- Begin Tilde.Club Ring Fragment-->
+<center>
+<font size="2">
+</font></p><center><font size="2">
+<center>
+<br><img src="http://tilde.club/~harper/webring.png"  border="0" usemap="#notepad.map"><br>
+</center>
+<br>
+Click for the [
+<a href="http://tilde.club/~harper/link.html?action=random" target="_top">Random page</a> ]
+<br>
+Want to join the ring? Click here for
+<a href="http://tilde.club/~harper/link.html?action=info" target="_top">info</a>.
+<br></font></center>
+<map name="notepad.map">
+<area shape="rect" coords="0, 0, 60, 70" target="_top" href="http://tilde.club/~harper/link.html?action=join">
+<area shape="rect" coords="130, 0, 417, 75" target="_top" href="http://tilde.club/~harper/link.html?action=random">
+<area shape="rect" coords="465, 0, 549, 75" target="_top" href="http://tilde.club/~harper/link.html?action=join">
+</map>
+<img src="http://tilde.club/~agray/img/tildeclub.gif">
+<p>
+Friends of this page: <a href="http://tilde.club/~agray/">~agray</a>
+</p>
+</center>
+<!-- End Webring Fragment-->
+
+
 
 </body>
 </html>
