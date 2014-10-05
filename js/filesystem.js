@@ -1,5 +1,80 @@
 const ROOT = new Folder("");
 
+// Represent a path to a file or folder as a doubly-linked list
+function Path(absolute_path) {
+  absolute_path = typeof absolute_path !== 'undefined' ? absolute_path : "/";
+
+  this.root = new PathNode("", null);
+
+  // Initialise to path provided in argument
+  var path_parts = absolute_path.split('/');
+  for(var i = 0; i < path_parts.length; i++) {
+    if(path_parts[i] == "") {
+      continue;
+    }
+
+    this.append(path_parts[i]);
+  }
+
+  this.append = function(name) {
+    switch(name) {
+      case '..':
+        this.truncate();
+        return;
+      case '.':
+        return; // Do nothing
+      default:
+        var last = this.last();
+        last.child = new PathNode(name, last);
+    }    
+  }
+
+  // Chop off the last element of the path. Usually used to handle '..'
+  this.truncate = function() {
+    this.last().parent.child = null;
+  }
+
+  this.last = function() {
+    var cursor = this.root;
+
+    while(cursor.child != null) {
+      cursor = cursor.child;
+    }
+
+    return cursor;
+  }
+
+  this.getIterator = function() {
+    return new PathIterator(this);
+  }
+
+  function PathNode(name, parent, child) {
+    child = typeof child !== 'undefined' ? child : null;
+
+    this.name = name;
+    this.child = child;
+    this.parent = parent;
+  }
+
+  function PathIterator(path) {
+    this.next = path.root;
+
+    this.getNext = function() {
+      if(this.hasNext()) {
+        var next = this.next;
+        this.next = next.child;
+        return next;
+      } else {
+        return null;
+      }
+    }
+
+    this.hasNext = function() {
+      return (this.next != null)
+    }
+  }
+}
+
 function Folder(name) {
   this.name = name;
   this.files = [];
