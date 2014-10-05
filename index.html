@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Toby J. Sullivan</title>
+<script language="javascript" src="js/jquery-1.11.1.min.js"></script>
+<script language="javascript">
+function execute_command(command) {
+  switch(command.toLowerCase()) {
+    case "help":
+      cmd_help();
+      break;
+    default:
+      print_line("Unknown command: "+command);
+  }
+}
+
+function cmd_help() {
+  print_line("There is no help for you.");
+}
+
+function print_line(line) {
+  $("#console").before("<p>"+line+"</p>");
+}
+
+// Listen for key input
+$(window).keypress(function(event) {
+  var cmd_line = $("#command_line");
+
+  if(event.keyCode == 13) {
+    // Handle ENTER press
+    var cmd = cmd_line.html();
+
+    // Append command to history
+    print_line("$ "+cmd);
+
+    // execute command
+    execute_command(cmd);
+    
+    // Clear buffer
+    cmd_line.html("");
+    return;
+  }
+
+  var cur_char = String.fromCharCode(event.keyCode);
+
+  cmd_line.append(cur_char);
+});
+
+$(window).keydown(function(event) {
+  var cmd_line = $("#command_line");
+  if(event.keyCode == 8) {
+    // Backspace
+    cmd_line.html(cmd_line.html().substring(0, cmd_line.html().length - 1))
+
+    // Cancel Backspace event
+    event.preventDefault();
+  }
+});
+</script>
+
+<style type="text/css">
+#cursor {
+  border-bottom: 2px solid #000;
+}
+</style>
+
+</head>
+<body>
+
+<h1>~~~this is my tilde.club page~~~~</h1>
+
+<p>Type `help` for available commands</p>
+<p id="console">$ <span id="command_line"></span><span id="cursor">&nbsp;&nbsp;</span></p>
+
+</body>
+</html>
